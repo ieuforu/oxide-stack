@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "types": "./src/index.ts",
   "exports": {
     ".": {
@@ -15,7 +16,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "oxlint --deny correctness --deny perf --quiet",
-    "lint:fix": "oxlint --fix && biome check --write --unsafe --no-errors-on-unmatched"
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "@repo/db": "workspace:*",
@@ -26,6 +27,5 @@
   "devDependencies": {
     "@repo/tsdown-config": "workspace:*",
     "tsdown": "catalog:build-tools"
-  },
-  "sideEffects": false
+  }
 }

@@ -62,7 +62,10 @@ export const createViteConfig = (options: RepoViteConfigOptions) => {
       resolve: {
         alias: [
           { find: '@', replacement: path.resolve(appDir, './src') },
-          { find: /^@repo\/(.*)$/, replacement: path.resolve(appDir, '../../packages/$1/src') },
+          {
+            find: /^@repo\/(.*)$/,
+            replacement: path.resolve(appDir, '../../packages/$1/src'),
+          },
         ],
       },
     }

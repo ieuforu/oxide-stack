@@ -6,11 +6,6 @@ use std::io::Result;
 use std::path::Path;
 use std::process::Command;
 
-fn format_file(path: &str) {
-    let _ = Command::new("pnpm")
-        .args(["biome", "check", "--write", "--unsafe", path])
-        .output();
-}
 
 fn snake_to_pascal(s: &str) -> String {
     s.split('_')
@@ -57,7 +52,6 @@ fn process_db() -> Result<()> {
     }
 
     fs::write(output_file, content)?;
-    format_file(output_file);
     Ok(())
 }
 
@@ -90,7 +84,6 @@ fn process_api() -> Result<()> {
     content.push_str("})\n\nexport type AppRouter = typeof appRouter\n");
 
     fs::write(output_file, content)?;
-    format_file(output_file);
     Ok(())
 }
 

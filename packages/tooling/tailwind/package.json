@@ -2,19 +2,19 @@
   "name": "@repo/tailwind-config",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "lint": "true",
-    "lint:fix": "true"
-  },
   "exports": {
     "./theme": "./theme.ts",
     "./globals.css": "./globals.css"
   },
-  "peerDependencies": {
-    "tailwindcss": "catalog:styling"
+  "scripts": {
+    "lint": "true",
+    "lint:fix": "true"
   },
   "devDependencies": {
     "@repo/tsdown-config": "workspace:*",
     "tsdown": "catalog:build-tools"
+  },
+  "peerDependencies": {
+    "tailwindcss": "catalog:styling"
   }
 }

@@ -12,8 +12,8 @@ export default defineConfig({
           env: {
             DATABASE_URL: 'mysql://root:root@localhost:3306/test_db',
           },
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
 })

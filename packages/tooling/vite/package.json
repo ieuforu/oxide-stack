@@ -12,13 +12,13 @@
     "lint:fix": "true"
   },
   "dependencies": {
-    "vite": "catalog:build-vite",
+    "@tailwindcss/vite": "catalog:build-vite",
     "@vitejs/plugin-react": "catalog:build-vite",
-    "@tailwindcss/vite": "catalog:build-vite"
+    "vite": "catalog:build-vite"
   },
   "peerDependencies": {
-    "typescript": "catalog:",
     "react": "catalog:framework-react",
-    "react-dom": "catalog:framework-react"
+    "react-dom": "catalog:framework-react",
+    "typescript": "catalog:"
   }
 }

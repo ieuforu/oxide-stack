@@ -15,16 +15,16 @@
     "build": "bun build src/index.ts --outdir dist --target bun",
     "start": "bun run dist/index.js",
     "lint": "oxlint --deny correctness --deny perf --quiet",
-    "lint:fix": "oxlint --fix && biome check --write --unsafe --no-errors-on-unmatched"
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "@hono/trpc-server": "catalog:data-layer",
     "@hono/zod-validator": "catalog:data-layer",
     "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/utils": "workspace:*",
     "@repo/validators": "workspace:*",
-    "@repo/auth": "workspace:*",
     "drizzle-orm": "catalog:data-layer",
     "hono": "catalog:data-layer"
   },

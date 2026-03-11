@@ -2,6 +2,7 @@
   "name": "@repo/db",
   "version": "0.0.1",
   "type": "module",
+  "sideEffects": false,
   "types": "./src/index.ts",
   "exports": {
     ".": {
@@ -38,7 +39,7 @@
     "db:seed": "bun src/seed.ts",
     "db:studio": "drizzle-kit studio",
     "lint": "oxlint --deny correctness --deny perf --quiet",
-    "lint:fix": "oxlint --fix && biome check --write --unsafe --no-errors-on-unmatched"
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "drizzle-orm": "catalog:data-layer",
@@ -51,6 +52,5 @@
     "drizzle-kit": "catalog:data-layer",
     "drizzle-seed": "catalog:data-layer",
     "tsdown": "catalog:build-tools"
-  },
-  "sideEffects": false
+  }
 }

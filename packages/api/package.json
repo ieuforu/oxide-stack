@@ -39,7 +39,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "oxlint --deny correctness --deny perf --quiet",
-    "lint:fix": "oxlint --fix && biome check --write --unsafe --no-errors-on-unmatched"
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "@repo/auth": "workspace:*",

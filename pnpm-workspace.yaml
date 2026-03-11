@@ -7,14 +7,14 @@ packages:
   - '!**/dist'
 
 catalog:
-  '@biomejs/biome': ^2.3.10
   '@types/bun': ^1.3.4
   '@types/node': ^25.0.3
   eslint: ^9.39.2
   husky: ^9.1.7
   lint-staged: ^15.2.11
   lucide-react: ^0.562.0
-  oxlint: ^1.34.0
+  oxlint: 1.53.0
+  oxfmt: 0.38.0
   turbo: ^2.7.3
   typescript: ^5.9.3
   vitest: 4.0.17

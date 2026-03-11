@@ -6,21 +6,23 @@ An industrial-grade, high-performance Fullstack Monorepo boilerplate powered by 
 
 ## Performance at a Glance
 
-| Action | Traditional Toolchain | Our Rust-Powered Stack | Improvement |
-| :--- | :--- | :--- | :--- |
-| **Linting** | ~6.5s (ESLint) | **~15ms (Oxlint)** | **400x Faster** |
-| **Formatting** | ~3.2s (Prettier) | **~8ms (Biome)** | **400x Faster** |
-| **Type Checking** | ~12.0s (tsc) | **~200ms (Turbo + Cache)** | **60x Faster** |
-| **Build (UI Pack)** | ~2.5s (tsup) | **~450ms (tsdown)** | **5x Faster** |
+| Action              | Traditional Toolchain | Our Rust-Powered Stack     | Improvement     |
+| :------------------ | :-------------------- | :------------------------- | :-------------- |
+| **Linting**         | ~6.5s (ESLint)        | **~15ms (Oxlint)**         | **400x Faster** |
+| **Formatting**      | ~3.2s (Prettier)      | **~8ms (Biome)**           | **400x Faster** |
+| **Type Checking**   | ~12.0s (tsc)          | **~200ms (Turbo + Cache)** | **60x Faster**  |
+| **Build (UI Pack)** | ~2.5s (tsup)          | **~450ms (tsdown)**        | **5x Faster**   |
 
 ## Tech Stack
 
 ### Runtime & Orchestration
+
 - **Runtime**: [Bun](https://bun.sh/) – Sub-millisecond startup, native TypeScript execution, and high-performance package management.
 - **Orchestration**: [Turborepo 2](https://turbo.build/) – Intelligent task scheduling with aggressive local/remote caching.
 - **Dependency Management**: **pnpm catalogs** – Unified version management across 11+ packages, ensuring zero version drift.
 
 ### Rust-Driven Toolchain
+
 - **Linting & Formatting**: [Biome](https://biomejs.dev/) – Unified, ultra-fast toolchain replacing ESLint and Prettier. ~10ms for full-project analysis.
 - **Deep Logic Analysis**: [Oxlint](https://oxc-project.github.io/) – High-performance Linter focusing on correctness, running 100x faster than ESLint.
 - **Bundling**: [tsdown](https://github.com/rolldown/tsdown) – Next-gen bundler for shared packages, offering Rust-level build speeds via Rolldown.
@@ -29,6 +31,7 @@ An industrial-grade, high-performance Fullstack Monorepo boilerplate powered by 
 - **Automation Engine**: scripts-rs – A custom Rust-powered workspace controller. Handles dynamic package.json synchronization, environmental path switching (Dev/Build), and automated index generation for DB schemas and API routers.
 
 ### Backend & Data Layer
+
 - **API Framework**: [Hono](https://hono.dev/) – Lightweight, Web-standard framework optimized for Bun.
 - **ORM**: [Drizzle ORM](https://orm.drizzle.team/) – Headless, type-safe ORM with automated migrations.
 - **Validation**: [Zod](https://zod.dev/) – Shared schemas across frontend, backend, and database layers.
@@ -81,7 +84,7 @@ pnpm codegen # Link to src/*.ts (Development)
 pnpm codegen:build # Link to dist/*.d.mts (Production)
 ```
 
-## Database Operations 
+## Database Operations
 
 ```shell
 # Generate SQL migrations based on Schema changes
@@ -99,6 +102,7 @@ pnpm db:studio
 ```
 
 ## Architectural Principles
+
 1. **Single Source of Truth (SSOT)**: Database Schemas, Zod Validators, and TS definitions are declared in packages/ and consumed everywhere. A schema change instantly propagates errors to the frontend via the build pipeline.
 
 2. **Topological Pipeline**: Turborepo ensures strict task ordering. Modifying a DB schema automatically triggers db:generate before any dependent app build starts, keeping types always in sync.
@@ -123,8 +127,8 @@ We maintain a rigorous record of architectural decisions to ensure long-term mai
 - **[ADR 004: Factory-Based Vite Configuration for Multi-App Consistency](docs/adr/004-factory-based-vite-config.md)**
 - **[ADR 005: Transitioning to a Rust-First Engineering Toolchain](docs/adr/005-rust-toolchain-revolution.md)**
 
-
 ## 🦀 The "Crab-Gen" Automation Engine
+
 Unlike traditional monorepos that rely on fragile manual configuration, this project uses a custom Rust-based controller (scripts-rs) to manage the workspace:
 
 - **Zero-Config Exports**: Automatically scans `src/` and populates `package.json` exports.

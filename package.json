@@ -1,17 +1,17 @@
 {
   "name": "my-monorepo",
-  "type": "module",
   "version": "0.0.1",
   "private": true,
-  "packageManager": "pnpm@10.26.0+sha512.3b3f6c725ebe712506c0ab1ad4133cf86b1f4b687effce62a9b38b4d72e3954242e643190fc51fa1642949c735f403debd44f5cb0edd657abe63a8b6a7e1e402",
+  "type": "module",
   "scripts": {
     "dev": "turbo dev --filter=@repo/server --filter=@repo/web",
     "dev:web": "turbo dev --filter=@repo/web",
     "dev:server": "turbo dev --filter=@repo/server",
     "build": "turbo build",
-    "lint": "turbo lint && biome check .",
-    "lint:fix": "turbo lint:fix --filter='@repo/*' && biome check --write --unsafe .",
-    "format": "biome check --write --no-errors-on-unmatched .",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix --filter='@repo/*'",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "prepare": "husky",
     "typecheck": "turbo typecheck",
     "codegen": "cargo run -p scripts-rs -- dev",
@@ -20,11 +20,11 @@
     "test:ui": "vitest --ui"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "husky": "catalog:",
     "lint-staged": "catalog:",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "tsx": "catalog:build-tools",
     "turbo": "catalog:",
@@ -32,19 +32,18 @@
     "vitest": "catalog:"
   },
   "lint-staged": {
-    "packages/**/src/**/*.{ts,tsx}": [
-      "pnpm codegen"
-    ],
+    "packages/**/src/**/*.{ts,tsx}": [],
     "*.{js,jsx,ts,tsx}": [
       "oxlint --fix",
-      "biome check --write --unsafe --no-errors-on-unmatched"
+      "oxfmt"
     ],
     "*.{json,md,css}": [
-      "biome format --write --no-errors-on-unmatched"
+      "oxfmt"
     ]
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
-  }
+  },
+  "packageManager": "pnpm@10.31.0"
 }

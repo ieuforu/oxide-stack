@@ -13,7 +13,7 @@
     "lint": {
       "dependsOn": [],
       "cache": true,
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css", ".oxlintrc.json", "biome.json"]
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css", ".oxlintrc.json", ".oxfmtrc.json"]
     },
     "lint:fix": {
       "cache": false

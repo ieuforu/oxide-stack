@@ -2,6 +2,9 @@
   "name": "@repo/ui",
   "version": "0.0.1",
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "types": "./src/index.tsx",
   "exports": {
     ".": {
@@ -18,7 +21,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "oxlint --deny correctness --deny perf --quiet",
-    "lint:fix": "oxlint --fix && biome check --write --unsafe --no-errors-on-unmatched"
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -41,8 +44,5 @@
     "@types/react-dom": "catalog:framework-react",
     "tsdown": "catalog:build-tools",
     "typescript": "catalog:"
-  },
-  "sideEffects": [
-    "**/*.css"
-  ]
+  }
 }

@@ -5,12 +5,12 @@
   "type": "module",
   "main": "./base.ts",
   "types": "./base.ts",
+  "exports": {
+    ".": "./base.ts"
+  },
   "scripts": {
     "lint": "true",
     "lint:fix": "true"
-  },
-  "exports": {
-    ".": "./base.ts"
   },
   "devDependencies": {
     "@types/node": "catalog:",

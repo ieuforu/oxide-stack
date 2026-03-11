@@ -1,26 +1,37 @@
 'use client'
 
 // import type { InferResponseType } from '@repo/server'
-// biome-ignore assist/source/organizeImports: <no sorting>
+
 import { Button, Card, CardTitle, Input, Separator, Skeleton, toast } from '@repo/ui'
 
 import { trpc } from '@/lib/trpc'
-import React from 'react'
+import React, { useTransition } from 'react'
 // import type { client } from '../lib/api'
 
 // type UsersResponse = InferResponseType<typeof client.users.$get>
 
+type User = { id: number; fullName: string | null; age: number | null }
+type OptimisticUser = User & { isPending?: boolean }
+
 export default function Home() {
   const utils = trpc.useUtils()
   const [newUserName, setNewUserName] = React.useState('')
+  const [startTransition] = useTransition()
 
   const usersQuery = trpc.user.list.useQuery()
   const projects = trpc.project.list.useQuery()
 
   const loading = usersQuery.isFetching || projects.isFetching
 
+  const [optimisticUsers, addOptimisticUser] = React.useOptimistic<OptimisticUser[], User>(
+    usersQuery.data ?? [],
+    (state, newUser) => [{ ...newUser, isPending: true }, ...state],
+  )
+
   const handleRequest = () => {
-    usersQuery.refetch()
+    startTransition(() => {
+      usersQuery.refetch()
+    })
   }
 
   const createMutation = trpc.user.create.useMutation({
@@ -34,9 +45,32 @@ export default function Home() {
     },
   })
 
-  const handlePostRequest = () => {
+  // const handlePostRequest = () => {
+  //   if (!newUserName) return toast.error('请输入内容')
+  //   createMutation.mutate({ fullName: newUserName, age: 18 })
+  // }
+
+  const handlePostRequest = async () => {
     if (!newUserName) return toast.error('请输入内容')
-    createMutation.mutate({ fullName: newUserName, age: 18 })
+
+    const payload = { fullName: newUserName, age: 18 }
+    const tempId = Date.now()
+
+    startTransition(async () => {
+      addOptimisticUser({ id: tempId, ...payload })
+
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      try {
+        if (Math.random() > 0.5) {
+          throw new Error('SERVER_BUSY: DATABASE_TIMEOUT')
+        }
+
+        await createMutation.mutateAsync(payload)
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : '提交失败')
+      }
+    })
   }
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 px-6 py-12 text-zinc-900 dark:text-zinc-50">
@@ -132,47 +166,61 @@ export default function Home() {
               <Skeleton key={i} className="h-32 w-full rounded-none bg-zinc-100" />
             ))}
           </div>
-        ) : usersQuery.data && usersQuery.data.length > 0 ? (
+        ) : optimisticUsers && optimisticUsers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200 border border-zinc-200 dark:bg-zinc-800 dark:border-zinc-800">
-            {usersQuery.data.map((user) => (
-              <Card
-                key={user.id}
-                className="rounded-none border-none bg-white p-6 transition-colors hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <p className="font-mono text-[10px] text-zinc-400 uppercase tracking-tight">
-                      Entry #{user.id.toString().padStart(3, '0')}
-                    </p>
-                    <CardTitle className="text-2xl font-bold tracking-tighter">
-                      {user.fullName}
-                    </CardTitle>
-                  </div>
-                  <div className="h-8 w-8 bg-zinc-900 dark:bg-zinc-50 flex items-center justify-center">
-                    <span className="text-white dark:text-zinc-900 font-bold text-xs">
-                      {user.fullName?.charAt(0) ?? '?'}
-                    </span>
-                  </div>
-                </div>
+            {optimisticUsers.map((user) => {
+              const isOptimistic = 'isPending' in user && user.isPending
+              return (
+                <Card
+                  key={user.id}
+                  className={`
+                    rounded-none border-none p-6 transition-all
+                    ${
+                      isOptimistic
+                        ? 'bg-zinc-100 opacity-60 dark:bg-zinc-900 border-2 border-dashed border-zinc-400'
+                        : 'bg-white dark:bg-zinc-950'
+                    }
+                  `}
+                >
+                  {isOptimistic && (
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-zinc-200/10 to-transparent animate-shimmer" />
+                  )}
 
-                <Separator className="my-4 bg-zinc-100 dark:bg-zinc-800" />
-
-                <div className="flex items-center justify-between font-mono text-xs">
-                  <div className="flex flex-col">
-                    <span className="text-zinc-400 uppercase">Metric Value</span>
-                    <span className={(user.age ?? 0) > 0 ? 'text-blue-600' : 'text-red-600'}>
-                      {user.age?.toLocaleString() ?? 'N/A'}
-                    </span>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <p className="font-mono text-[10px] text-zinc-400 uppercase tracking-tight">
+                        Entry #{user.id.toString().padStart(3, '0')}
+                      </p>
+                      <CardTitle className="text-2xl font-bold tracking-tighter">
+                        {user.fullName}
+                      </CardTitle>
+                    </div>
+                    <div className="h-8 w-8 bg-zinc-900 dark:bg-zinc-50 flex items-center justify-center">
+                      <span className="text-white dark:text-zinc-900 font-bold text-xs">
+                        {user.fullName?.charAt(0) ?? '?'}
+                      </span>
+                    </div>
                   </div>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto font-bold uppercase text-[10px] tracking-widest"
-                  >
-                    Details →
-                  </Button>
-                </div>
-              </Card>
-            ))}
+
+                  <Separator className="my-4 bg-zinc-100 dark:bg-zinc-800" />
+
+                  <div className="flex items-center justify-between font-mono text-xs">
+                    <div className="flex flex-col">
+                      <span className="text-zinc-400 uppercase">Metric Value</span>
+                      <span className={(user.age ?? 0) > 0 ? 'text-blue-600' : 'text-red-600'}>
+                        {user.age?.toLocaleString() ?? 'N/A'}
+                      </span>
+                    </div>
+                    <Button
+                      variant="link"
+                      className="p-0 h-auto font-bold uppercase text-[10px] tracking-widest"
+                    >
+                      Details →
+                    </Button>
+                  </div>
+                </Card>
+              )
+            })}
           </div>
         ) : (
           <div className="border-4 border-double border-zinc-200 p-20 text-center dark:border-zinc-800">
