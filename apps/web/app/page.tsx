@@ -16,7 +16,7 @@ type OptimisticUser = User & { isPending?: boolean }
 export default function Home() {
   const utils = trpc.useUtils()
   const [newUserName, setNewUserName] = React.useState('')
-  const [startTransition] = useTransition()
+  const [, startTransition] = useTransition()
 
   const usersQuery = trpc.user.list.useQuery()
   const projects = trpc.project.list.useQuery()

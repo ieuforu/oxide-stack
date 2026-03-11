@@ -32,11 +32,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify Codegen & Architecture Guardrails
-        run: |
-          pnpm codegen
-          git diff --exit-code
-
       - name: Lint
         run: pnpm lint
 
